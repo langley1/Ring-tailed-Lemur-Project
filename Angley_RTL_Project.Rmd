@@ -1,23 +1,28 @@
+***
+
 ---
 title: "Ring-Tailed Lemur Project"
 output: html_document
 ---
+### Laura Angley
+
+***
 
 ## Introduction
 
-  Ring-tailed lemurs (*Lemur catta*) are a semi-terrestrial, diurnal species with a limited range of Southern Madasgascar (Sauther 1998). Similar to cercopithecine monkeys, ring-tailed lemurs have complex social troops where adult males, females, and immature offspring are present (Jolly 1996; Nakamich & Koyama 1996). Previous studies have found that ring-tailed lemurs clearly have a female-dominant social structure and form dominance hierarchies within female and male groups as well (Jolly 1996; Kappeler 1990; Budnitz and Dainis, 1975). In captivity, ring-tailed lemurs tend to live in much smaller troops compared to those found in the wild and they don’t have to compete as much for resources.  However, even in a captive setting, adult female ring-tailed lemurs still outrank males (Taylor 1986; Kappeler 1990).
+  Ring-tailed lemurs (*Lemur catta*) are a semi-terrestrial, diurnal species with a limited range of Southern Madasgascar (Sauther 1998). Similar to cercopithecine monkeys, ring-tailed lemurs have complex social troops where adult males, females, and immature offspring are present (Jolly 1996; Nakamich & Koyama 1996). Previous studies have found that ring-tailed lemurs clearly have a female-dominant social structure and form dominance hierarchies within female and male groups as well (Jolly 1996; Kappeler 1990; Budnitz and Dainis 1975). In captivity, ring-tailed lemurs tend to live in much smaller troops compared to those found in the wild and they don’t have to compete as much for resources.  However, even in a captive setting, adult female ring-tailed lemurs still outrank males (Taylor 1986; Kappeler 1990).
 
-  Dominance rankings within troops influence certain social behaviors, such as grooming, greeting, and social proximity (Nakamich & Koyama 1996). After creating a dominance hierarchy based on agonistic displays, Nakamich & Koyama (1996) found that subordinate individuals were significantly more likely to greet and groom dominant individuals than vice versa and males spent significantly more time alone than the higher-ranking females. 
+  Dominance rankings within troops influence certain social behaviors, such as grooming, greeting, and social proximity (Nakamich & Koyama 1996). After creating a dominance hierarchy based on agonistic displays, Nakamich & Koyama (1996) found that subordinate individuals were significantly more likely to greet and groom dominant individuals than *vice versa* and males spent significantly more time alone than the higher-ranking females. 
 
   Using agonistic interactions to determine dominance rank among ring-tailed lemurs is an extremely common approach when studying both wild and captive individuals (Taylor 1986; Kappeler 1990; Gould 1996). Furthermore, Taylor (1986) found that agonistic interactions were more likely to occur between unrelated individuals and distant kin than between closely related kin, making it an ideal approach when multiple families make up the study troop. Since the small ring-tailed lemur population observed in this study only included one breeding pair and their two female offspring, agonistic behaviors were not commonly observed. Therefore, greeting behaviors were used as a determinant for dominance rank instead where the action of approaching and greeting others indicated a lower ranking.
 
-  The main purpose of this study was to practice collecting behavioral data on a group of ring-tailed lemurs and to investigate how their dominance rank effects grooming behaviors and social proximity. I hypothesized that 1) the male will greet the females more than vice versa, 2) subordinate individuals will initiate grooming bouts with dominant individuals more often than vice versa, 3) dominant individuals will end grooming bouts more often than vice versa, and 4) subordinate individuals will spend more time alone than dominant individuals. 
+  The main purpose of this study was to practice collecting behavioral data on a group of ring-tailed lemurs and to investigate how their dominance rank effects grooming behaviors and social proximity. I hypothesized that 1) the male will greet the females more than *vice versa*, 2) subordinate individuals will initiate grooming bouts with dominant individuals more often than *vice versa*, 3) dominant individuals will end grooming bouts more often than *vice versa*, and 4) subordinate individuals will spend more time alone than dominant individuals. 
 
 ## Methods
 
   I conducted this study at the Franklin Park Zoo in Boston, Massachusetts. The group of captive ring-tailed lemurs at the zoo included one adult male, and three adult females (exact ages unknown), which I named King Julian, Everest, May, and Zoey, respectively. The zookeepers informed me that King Julian and Everest are the breeding pair and May and Zoey are their offspring. I partly used this knowledge in conjunction with the approaching and greeting behaviors to determine rank order. 
   
-  I collected behavioral data using the focal animal sampling method (Altmann 1974) and every individual was a focal animal. Each focal lasted 20 minutes and a total of 14 focal observations were collected. I recorded all approaching, greeting, and grooming behaviors via the focal sampling method as well as contact ID and any individual <1m, <5m, and <10m away from the focal at 2 minute intervals. As described by Nakamich & Koyama (1996), greeting consisted of one individual licking another’s muzzle and/or touching it with their own muzzle. In unidirectional grooming, one individual received grooming from another and did not reciprocate. In mutual grooming, two animals groomed one other simultaneously. I also recorded which individuals initiated and ended each grooming bout. Greeting and grooming behaviors were also collected ad libitum if necessary. I combined the focal animal sampling with the *ad libitum* data for analysis. 
+  I collected behavioral data using the focal animal sampling method (Altmann 1974) and every individual was a focal animal. Each focal lasted 20 minutes and a total of 14 focal observations were collected. I recorded all approaching, greeting, and grooming behaviors via the focal sampling method as well as contact ID and any individual <1m, <5m, and <10m away from the focal at 2 minute intervals. As described by Nakamich & Koyama (1996), greeting consisted of one individual licking another’s muzzle and/or touching it with their own muzzle. In unidirectional grooming, one individual received grooming from another and did not reciprocate. In mutual grooming, two animals groomed one other simultaneously. I also recorded which individuals initiated and ended each grooming bout. Greeting and grooming behaviors were also collected *ad libitum* if necessary. I combined the focal animal sampling with the *ad libitum* data for analysis. 
 
 ## Data Analyses
 
@@ -54,10 +59,10 @@ ZY_full <- lemurs %>% filter(Focal_ID == "ZY")
 **Everest's Data**
 ```{r}
 EV_1<- EV_full %>% transform(Behavior_Tally = strsplit(Behavior_Tally, "/")) %>% unnest(Behavior_Tally,keep_empty=TRUE)
-EV_1
+head(EV_1)
 
 EV_2<- EV_full %>% transform(Point_Behavior = strsplit(Point_Behavior, "/")) %>% unnest(Point_Behavior, keep_empty=TRUE)
-EV_2
+head(EV_2)
 
 #don't need to do her ad_libitum data because all behavior entries were single entries
 ```
@@ -65,7 +70,7 @@ EV_2
 **King Julian's Data**
 ```{r}
 KJ_1<- KJ_full %>% transform(Behavior_Tally = strsplit(Behavior_Tally, "/")) %>% unnest(Behavior_Tally,keep_empty=TRUE)
-KJ_1
+(KJ_1)
 
 KJ_2<- KJ_full %>% transform(Ad_Libitum = strsplit(Ad_Libitum, "/")) %>% unnest(Ad_Libitum, keep_empty=TRUE)
 
@@ -98,7 +103,7 @@ EV_GT_MY_1<- EV_1 %>% filter(Behavior_Tally %in% c("GTA_MY","APA_MY")) #filterin
 EV_GT_MY_2<- EV_2 %>% filter(Point_Behavior == "GTA_MY") #filtering out the greeting and approaching behaviors from Point_Behavior column
 EV_GT_MY_3<- KJ_2 %>% filter(Ad_Libitum == "EV_APA_MY")
 EV_GT_MY_4<- ZY_3 %>% filter(Ad_Libitum %in% c("EV_GTA_MY", "EV_APA_MY"))
-EV_GT_MY<- sum(nrow(EV_GT_MY_1),nrow(EV_GT_MY_2),nrow(EV_GT_MY_3),nrow(EV_GT_MY_4)) #adding up the number of rows from each for my final obj because I only care about how many times in total EV greeting MY
+EV_GT_MY<- sum(nrow(EV_GT_MY_1),nrow(EV_GT_MY_2),nrow(EV_GT_MY_3),nrow(EV_GT_MY_4)) #adding up the number of rows from each for my final obj because I only care about how many times in total EV greeted MY
 EV_GT_MY
 ```
 
@@ -196,7 +201,7 @@ summary(ranks)
 
 ### Grooming Behavior 
 
-**Subordinates Grooming Dominants (includes any time a subordinate iniated a grooming bout or groomed a dominant individual unidirectionally)**
+**Subordinates Grooming Dominants** (includes any time a subordinate iniated a grooming bout or groomed a dominant individual unidirectionally)
 ```{r}
 sub_gr_dom_1<- EV_1 %>% filter(Behavior_Tally %in% c("GRIA_MY","GRA_MY"))
 sub_gr_dom_2<- MY_1 %>% filter(Behavior_Tally %in% c("GRIR_KJ","GRIR_EV"))
@@ -207,7 +212,7 @@ sub_gr_dom<- sum(nrow(sub_gr_dom_1),nrow(sub_gr_dom_2),nrow(sub_gr_dom_3),nrow(s
 sub_gr_dom
 ```
 
-**Dominants Grooming Subordinates (includes any time a dominant iniated a grooming bout or groomed a subordinant individual unidirectionally)**
+**Dominants Grooming Subordinates** (includes any time a dominant iniated a grooming bout or groomed a subordinant individual unidirectionally)
 ```{r}
 dom_gr_sub_1<- KJ_2 %>% filter(Ad_Libitum %in% c("MY_GRIA_EV", "MY_GRA_EV"))
 dom_gr_sub_2<- EV_1 %>% filter(Behavior_Tally == "GRIR_MY")
@@ -274,7 +279,7 @@ end_binom_test<- binom.test(c(dom_gr_end_sub,sub_gr_end_dom), p=0.5, conf.level 
 end_binom_test
 ```
 
-*There is no significant difference between the number of times subs ended grooming bouts with dominants or vice versa* 
+*There is no significant difference between the number of times subs ended grooming bouts with dominants and vice versa* 
 
 ### Mutual Grooming between pairs of individuals
 
@@ -323,6 +328,7 @@ Running a binomal test between EV-MY mutual grooming and ZY-KJ mutual grooming
 GRM_binom_test<- binom.test(c(EV_MY_GRM,ZY_KJ_GRM), p=0.5, conf.level = 0.95)
 GRM_binom_test
 ```
+*There is no significant difference between EV-MY mututal grooming and ZY-KJ mutual grooming*
 
 ### Social Proximity Data
 
@@ -462,6 +468,35 @@ abline(model.k,
 *Figure 2. The relationship between the dominance rank (MY= 1,EV= 2,ZY= 3,KJ= 4) and the percentage of time each individual spent alone (no other individual in contact or <1m away from the focal).* 
 
 ## Discussion
+
+  The main purpose of this study was to practice collecting behavioral data on a troop of captive ring-tailed lemurs (*Lemur catta*) and to investigate how their dominance rank effects grooming behaviors and social proximity. I hypothesized that 1) the male will greet the females more than *vice versa*, 2) subordinate individuals will initiate grooming bouts with dominant individuals more often than *vice versa*, 3) dominant individuals will end grooming bouts more often than *vice versa*, and 4) subordinate individuals will spend more time alone than dominant individuals. 
+
+  My first hypothesis is supported by the use of greeting behaviors as a rank determinant. King Julian greeted all three females more often than they greeted him in return, designating him the lowest ranking individual in the troop. This mirrors previous studies, which confirm that ring-tailed lemurs form female-dominant social structures both in the wild and in captivity (Jolly 1996; Kappeler 1990; Budnitz and Dainis, 1975; Taylor 1986). My dominance hierarchy determination closely reflects the known kinship of this troop with only one discrepancy (See *Greeting Matrix*). According to the zookeepers, Everest is the breeding female and the mother of both May and Zoey. Nakamich & Koyama (1996) found all mothers in two separate, wild troops of ring-tailed lemurs maintain dominance over their adult daughters. Therefore, I predicted that Everest would receive the most greetings and greet the least in return, designating her the alpha female. The greeting matrix indicates that Everest approached and/or greeted May more than double the amount of times May approached and/or greeted her in return. Because of this, I assigned May the highest-ranking position. However, I question if a small, captive troop such as this follows the expected dominance hierarchical behaviors, especially, since minimal agonistic interactions were observed over the entire course of behavior observations, which is the most common way to determine rank in larger, more complex troops. 
+
+  My second and third hypotheses regarding grooming bouts between subordinate and dominant individuals were not supported by my results. Table 2 shows no significant difference between the percentage of time subordinates initiated grooming with a dominant individual and/or engaged in unidirectional grooming with a dominant (with no grooming reciprocated from dominant) and *vice versa*. Table 3 shows a similar comparison between subordinate and dominant grooming bout terminations. Closely related adult females, including sisters and mother-daughter dyads, tend to engage in frequent grooming interactions with each other, while most females without close kin do not (Nakamich & Koyama, 1996). A high occurrence of grooming interactions in such a small troop of related female lemurs may not reflect a clear, dominance driven grooming hierarchy as expected. 
+
+  Lastly, the results mostly support my hypothesis that lower-ranking individuals will spend more time alone than higher-ranking individuals. May and Everest, the two-highest ranking troop members, spent the lowest percentage of time alone while Zoey and King Julian, the two-lowest ranking members, spent much more time alone (Fig. 1). These results are similar to Nakamich & Koyama (1996), who found a similar pattern in the two wild troops they studied. Also, Gould (1996) found females to be mainly responsible for proximity maintenance of male-female dyads. This could explain why King Julian spent the greatest percentage of time alone, since he is the only male in the troop. There seems to be a positive correlation between the dominance rank order and the amount of time each individual spent alone (Fig. 2); however, tests do not show this to be a significant correlation. 
+
+  The research presented here is my introduction on conducting behavioral observations on a group of captive lemurs and analyzing behavioral data in R. Even though this small group of ring-tailed lemurs did not display all of the social interactions as expected, their behaviors still suggest the presence of a female-dominant social structure with close kinship relations. It has been suggested that female ring-tailed lemurs are less stable in their dominance hierarchy than males and may change ranks throughout various breeding seasons (Taylor 1986). Social rankings among females may therefore be more fluid in nature and subject to change. Furthermore, captive lemurs in such small troop sizes, as seen in this study, who have minimal competition for food and don’t engage in mate selection, may possess an even less concrete dominance hierarchy than larger troops both in captivity and in the wild. 
+
+#### References
+
+Altmann, J. (1974). Observational study of behaviour: Sampling methods. *Behaviour* 49: 227-265. 
+
+Budnitz, N., and Daiis, K. (1975). Lemur catta: Ecology and behavior. In Tattersall, I., and Sussman, R, W. (eds.), Lemur Biology, Plenum, New York, pp. 219-235. 
+
+Gould, L. (1996). Male-female affiliative relationships in naturally occurring ringtailed lemurs (*Lemur catta*) at the Beza-Mahafaly Reserve, Madagascar. Am. J. *Primatol*. 39: 63-78. 
+
+Jolly, A. (1966). Lemur Behavior, University of Chicago Press, Chicago and London.
+
+Kappeler PM: Female dominance in Lemur catta: More than just female feeding priority? *Folia Primatol* 1990;55:92–95.
+
+Nakamich, M., & Koyama, N. Social Relationships Among Ring-Tailed Lemurs (*Lemur catta*) in Two Free-Ranging Troops at Berenty Reserve, Madagascar. *International Journal of Primatology*, Vol. 18, No. 1, 1997.
+
+Sauther, M., L. Interplay of Phenology and Reproduction in Ring-Tailed Lemurs: Implications for Ring-Tailed Lemur Conservation. *Folia Primatol* 1998:309–320
+
+Taylor, L: Kinship, Dominance, and Social Organization in a Semi Free-ranging Group of Ringtailed Lemurs (*Lemur catta*); PhD thesis, Washington University, 1986.
+
 
 
 
