@@ -3,17 +3,37 @@ title: "Ring-Tailed Lemur Project"
 output: html_document
 ---
 
+## Introduction
+
+  Ring-tailed lemurs (*Lemur catta*) are a semi-terrestrial, diurnal species with a limited range of Southern Madasgascar (Sauther 1998). Similar to cercopithecine monkeys, ring-tailed lemurs have complex social troops where adult males, females, and immature offspring are present (Jolly 1996; Nakamich & Koyama 1996). Previous studies have found that ring-tailed lemurs clearly have a female-dominant social structure and form dominance hierarchies within female and male groups as well (Jolly 1996; Kappeler 1990; Budnitz and Dainis, 1975). In captivity, ring-tailed lemurs tend to live in much smaller troops compared to those found in the wild and they don’t have to compete as much for resources.  However, even in a captive setting, adult female ring-tailed lemurs still outrank males (Taylor 1986; Kappeler 1990).
+
+  Dominance rankings within troops influence certain social behaviors, such as grooming, greeting, and social proximity (Nakamich & Koyama 1996). After creating a dominance hierarchy based on agonistic displays, Nakamich & Koyama (1996) found that subordinate individuals were significantly more likely to greet and groom dominant individuals than vice versa and males spent significantly more time alone than the higher-ranking females. 
+
+  Using agonistic interactions to determine dominance rank among ring-tailed lemurs is an extremely common approach when studying both wild and captive individuals (Taylor 1986; Kappeler 1990; Gould 1996). Furthermore, Taylor (1986) found that agonistic interactions were more likely to occur between unrelated individuals and distant kin than between closely related kin, making it an ideal approach when multiple families make up the study troop. Since the small ring-tailed lemur population observed in this study only included one breeding pair and their two female offspring, agonistic behaviors were not commonly observed. Therefore, greeting behaviors were used as a determinant for dominance rank instead where the action of approaching and greeting others indicated a lower ranking.
+
+  The main purpose of this study was to practice collecting behavioral data on a group of ring-tailed lemurs and to investigate how their dominance rank effects grooming behaviors and social proximity. I hypothesized that 1) the male will greet the females more than vice versa, 2) subordinate individuals will initiate grooming bouts with dominant individuals more often than vice versa, 3) dominant individuals will end grooming bouts more often than vice versa, and 4) subordinate individuals will spend more time alone than dominant individuals. 
+
+## Methods
+
+  I conducted this study at the Franklin Park Zoo in Boston, Massachusetts. The group of captive ring-tailed lemurs at the zoo included one adult male, and three adult females (exact ages unknown), which I named King Julian, Everest, May, and Zoey, respectively. The zookeepers informed me that King Julian and Everest are the breeding pair and May and Zoey are their offspring. I partly used this knowledge in conjunction with the approaching and greeting behaviors to determine rank order. 
+  
+  I collected behavioral data using the focal animal sampling method (Altmann 1974) and every individual was a focal animal. Each focal lasted 20 minutes and a total of 14 focal observations were collected. I recorded all approaching, greeting, and grooming behaviors via the focal sampling method as well as contact ID and any individual <1m, <5m, and <10m away from the focal at 2 minute intervals. As described by Nakamich & Koyama (1996), greeting consisted of one individual licking another’s muzzle and/or touching it with their own muzzle. In unidirectional grooming, one individual received grooming from another and did not reciprocate. In mutual grooming, two animals groomed one other simultaneously. I also recorded which individuals initiated and ended each grooming bout. Greeting and grooming behaviors were also collected ad libitum if necessary. I combined the focal animal sampling with the *ad libitum* data for analysis. 
+
+## Data Analyses
+
 ```{r}
 library(dplyr)
 library(tidyverse)
+library(curl)
 ```
 
-### Importing My Data
+Importing My Data
 ```{r}
-lemurs_full<- read.csv("RTL dataset.csv", header = TRUE) #full dataset
+lemurs_full<- curl("https://raw.githubusercontent.com/langley1/Ring-tailed-Lemur-Project/master/RTL%20dataset.csv")
+lemurs_full<- read.csv(lemurs_full, header = TRUE) #full dataset
 head(lemurs_full)
 
-i <- sapply(lemurs_full, is.factor)
+i <- sapply(lemurs_full, is.factor) #I need to turn the factor data into characters in order to transform and unnest later on 
 lemurs_full[i] <- lapply(lemurs_full[i], as.character)
 lemurs_full %>% mutate_if(is.factor, as.character) -> lemurs_full
 
@@ -21,7 +41,7 @@ lemurs <- lemurs_full %>% select(Focal_ID, Point_Sample, Nearest_Neighbor, Point
 head(lemurs)
 ```
 
-### Creating data frames for each individual animal ID
+Creating data frames for each individual animal ID
 ```{r}
 EV_full <- lemurs %>% filter(Focal_ID == "EV") 
 KJ_full <- lemurs %>% filter(Focal_ID == "KJ")
@@ -29,9 +49,9 @@ MY_full <- lemurs %>% filter(Focal_ID == "MY")
 ZY_full <- lemurs %>% filter(Focal_ID == "ZY")
 ```
 
-## Transforming and Unnestting Each Animal's Necessary Behavior Data
+### Transforming and Unnestting Each Animal's Necessary Behavior Data
 
-### Everest's Data
+**Everest's Data**
 ```{r}
 EV_1<- EV_full %>% transform(Behavior_Tally = strsplit(Behavior_Tally, "/")) %>% unnest(Behavior_Tally,keep_empty=TRUE)
 EV_1
@@ -42,7 +62,7 @@ EV_2
 #don't need to do her ad_libitum data because all behavior entries were single entries
 ```
 
-### King Julian's Data
+**King Julian's Data**
 ```{r}
 KJ_1<- KJ_full %>% transform(Behavior_Tally = strsplit(Behavior_Tally, "/")) %>% unnest(Behavior_Tally,keep_empty=TRUE)
 KJ_1
@@ -52,7 +72,7 @@ KJ_2<- KJ_full %>% transform(Ad_Libitum = strsplit(Ad_Libitum, "/")) %>% unnest(
 # don't need to do his point behavior data
 ```
 
-### May's Data
+**May's Data**
 ```{r}
 MY_1<- MY_full %>% transform(Behavior_Tally = strsplit(Behavior_Tally, "/")) %>% unnest(Behavior_Tally,keep_empty=TRUE)
 
@@ -61,7 +81,7 @@ MY_2<- MY_full %>% transform(Ad_Libitum = strsplit(Ad_Libitum, "/")) %>% unnest(
 # don't need to do her point behavior data
 ```
 
-### Zoey's Data
+**Zoey's Data**
 ```{r}
 ZY_1<- ZY_full %>% transform(Behavior_Tally = strsplit(Behavior_Tally, "/")) %>% unnest(Behavior_Tally,keep_empty=TRUE)
 
@@ -70,9 +90,9 @@ ZY_2<- ZY_full %>% transform(Point_Behavior = strsplit(Point_Behavior, "/")) %>%
 ZY_3<- ZY_full %>% transform(Ad_Libitum = strsplit(Ad_Libitum, "/")) %>% unnest(Ad_Libitum, keep_empty=TRUE)
 ```
 
-# Greeting Behavior
+### Greeting Behavior
 
-### Everest greeting May
+**Everest greeting May**
 ```{r}
 EV_GT_MY_1<- EV_1 %>% filter(Behavior_Tally %in% c("GTA_MY","APA_MY")) #filtering out the greeting and approaching behaviors from Behavior_Tally column
 EV_GT_MY_2<- EV_2 %>% filter(Point_Behavior == "GTA_MY") #filtering out the greeting and approaching behaviors from Point_Behavior column
@@ -82,14 +102,14 @@ EV_GT_MY<- sum(nrow(EV_GT_MY_1),nrow(EV_GT_MY_2),nrow(EV_GT_MY_3),nrow(EV_GT_MY_
 EV_GT_MY
 ```
 
-### Everest greeting King Julian
+**Everest greeting King Julian**
 ```{r}
 EV_GT_KJ_1<- EV_1 %>% filter(Behavior_Tally == "APA_KJ")
 EV_GT_KJ<- nrow(EV_GT_KJ_1)
 EV_GT_KJ
 ```
 
-### Zoey greeting King Julian
+**Zoey greeting King Julian**
 ```{r}
 ZY_GT_KJ_1<- EV_1 %>% filter(Ad_Libitum == "ZY_GTA_KJ/")
 ZY_GT_KJ_2<- ZY_1 %>% filter(Behavior_Tally == "GTA_KJ")
@@ -97,7 +117,7 @@ ZY_GT_KJ<- sum(nrow(ZY_GT_KJ_1),nrow(ZY_GT_KJ_2))
 ZY_GT_KJ
 ```
 
-### May greeting King Julian
+**May greeting King Julian**
 ```{r}
 MY_GT_KJ_1<- EV_1 %>% filter(Ad_Libitum == "MY_GTA_KJ/")
 MY_GT_KJ_2<- MY_1 %>% filter(Behavior_Tally == "APA_KJ")
@@ -106,7 +126,7 @@ MY_GT_KJ<- sum(nrow(MY_GT_KJ_1),nrow(MY_GT_KJ_2),nrow(MY_GT_KJ_3))
 MY_GT_KJ
 ```
 
-### King Julian greeting Zoey
+**King Julian greeting Zoey**
 ```{r}
 KJ_GT_ZY_1<- KJ_1 %>% filter(Point_Behavior == "APA_ZY/")
 KJ_GT_ZY_2<- MY_2 %>% filter(Ad_Libitum == "KJ_APA_ZY")
@@ -115,7 +135,7 @@ KJ_GT_ZY<- sum(nrow(KJ_GT_ZY_1),nrow(KJ_GT_ZY_2),nrow(KJ_GT_ZY_3))
 KJ_GT_ZY
 ```
 
-### King Julian greeting Everest
+**King Julian greeting Everest**
 ```{r}
 KJ_GT_EV_1<- KJ_1 %>% filter(Behavior_Tally == "APA_EV")
 KJ_GT_EV_2<- EV_1 %>% filter(Behavior_Tally == "GTR_KJ")
@@ -123,7 +143,7 @@ KJ_GT_EV<- sum(nrow(KJ_GT_EV_1),nrow(KJ_GT_EV_2))
 KJ_GT_EV
 ```
 
-### Zoey greeting Everest
+**Zoey greeting Everest**
 ```{r}
 ZY_GT_EV_1<- KJ_2 %>% filter(Ad_Libitum == "ZY_GTA_EV")
 ZY_GT_EV_2<- ZY_1 %>% filter(Behavior_Tally == "APA_EV")
@@ -131,14 +151,14 @@ ZY_GT_EV<- sum(nrow(ZY_GT_EV_1),nrow(ZY_GT_EV_2))
 ZY_GT_EV
 ```
 
-### May greeting Zoey
+**May greeting Zoey**
 ```{r}
 MY_GT_ZY_1<- KJ_2 %>% filter(Ad_Libitum == "MY_GTA_ZY")
 MY_GT_ZY<- nrow(MY_GT_ZY_1)
 MY_GT_ZY
 ```
 
-### May greeting Everest
+**May greeting Everest**
 ```{r}
 MY_GT_EV_1<- KJ_2 %>% filter(Ad_Libitum == "MY_APA_EV")
 MY_GT_EV_2<- MY_1 %>% filter(Behavior_Tally == "GTA_EV")
@@ -146,43 +166,37 @@ MY_GT_EV<- sum(nrow(MY_GT_EV_1),nrow(MY_GT_EV_2))
 MY_GT_EV
 ```
 
-### Zoey greeting May
+**Zoey greeting May**
 ```{r}
 ZY_GT_MY_1<- ZY_1 %>% filter(Behavior_Tally %in% c("APA_MY","GTA_MY"))
 ZY_GT_MY<- nrow(ZY_GT_MY_1)
 ZY_GT_MY
 ```
 
-### King Julian greeting May
+**King Julian greeting May**
 ```{r}
 KJ_GT_MY_1<- KJ_1 %>% filter(Behavior_Tally %in% c("GTA_MY","APA_MY"))
 KJ_GT_MY<- nrow(KJ_GT_MY_1)
 KJ_GT_MY
 ```
 
-### Creating a matrix to show the greeting behaviors
+Creating a matrix to show the greeting behaviors
 ```{r}
 GT_matrix<- matrix(c(0,1,8,0,2,0,3,4,3,2,0,1,3,3,2,0),nrow = 4, ncol = 4, byrow = T)
 dimnames(GT_matrix)<- list(c("EV","KJ","MY","ZY"),c("EV","KJ","MY","ZY"))
-GT_matrix
 ```
 
-In this matrix actors are on the column on the left and receivers are on the row on top. Using greeting occurances as a determinant for dominance rank, we can assign the following rankings:
-Everest greets May more than May greets Everest so MY = alpha female
-King Julian greets Zoey the most so KJ = lowest ranking
-
-### Creating a new dataframe 
+Creating a new dataframe 
 ```{r}
 rank<- c(1,2,3,4)
 ids<- c("MY","EV","ZY","KJ")
 ranks<- data.frame(IDs=ids, Rank=rank)
 summary(ranks)
-ranks
 ```
 
-# Grooming Behavior 
+### Grooming Behavior 
 
-### Subordinates Grooming Dominants (includes any time a subordinate iniated a grooming bout or groomed a dominant individual unidirectionally)
+**Subordinates Grooming Dominants (includes any time a subordinate iniated a grooming bout or groomed a dominant individual unidirectionally)**
 ```{r}
 sub_gr_dom_1<- EV_1 %>% filter(Behavior_Tally %in% c("GRIA_MY","GRA_MY"))
 sub_gr_dom_2<- MY_1 %>% filter(Behavior_Tally %in% c("GRIR_KJ","GRIR_EV"))
@@ -193,7 +207,7 @@ sub_gr_dom<- sum(nrow(sub_gr_dom_1),nrow(sub_gr_dom_2),nrow(sub_gr_dom_3),nrow(s
 sub_gr_dom
 ```
 
-### Dominants Grooming Subordinates (includes any time a dominant iniated a grooming bout or groomed a subordinant individual unidirectionally)
+**Dominants Grooming Subordinates (includes any time a dominant iniated a grooming bout or groomed a subordinant individual unidirectionally)**
 ```{r}
 dom_gr_sub_1<- KJ_2 %>% filter(Ad_Libitum %in% c("MY_GRIA_EV", "MY_GRA_EV"))
 dom_gr_sub_2<- EV_1 %>% filter(Behavior_Tally == "GRIR_MY")
@@ -204,7 +218,7 @@ dom_gr_sub<- sum(nrow(dom_gr_sub_1),nrow(sub_gr_dom_2),nrow(sub_gr_dom_3),nrow(s
 dom_gr_sub
 ```
 
-### Finding the percentage of times subordinates groom dominants and dominants groom subordinates
+Finding the percentage of times subordinates groom dominants and dominants groom subordinates
 ```{r}
 sub_gr_dom_perc<- (sub_gr_dom/140)*100 # I'm dividing it by 140 because my raw data has a total of 14 focal observations with 10 point samples each focal observations
 sub_gr_dom_perc
@@ -216,30 +230,19 @@ dom_gr_sub_perc
 percentage<- c(sub_gr_dom_perc,dom_gr_sub_perc)
 grooming_order<- c("Subordinate to Dominant","Dominant to Subordinate")
 gr_df<- data.frame("Grooming Order"=grooming_order, Percentage=percentage)
-gr_df
 ```
 
-```{r}
-#install.packages("ggpubr")
-library(ggpubr)
-library(ggplot2)
-
-plot<- ggboxplot(gr_df, x = "Grooming.Order", y = "Percentage", 
-          color = "Grooming.Order", palette = c("#00AFBB", "#E7B800"),
-          ylab = "Percentage of Occurences", xlab = "Grooming Order")
-plot
-```
-
-### Running a binomal test for the grooming order data
+Running a binomal test for the grooming order initiation data
 ```{r}
 binom_test<- binom.test(c(sub_gr_dom,dom_gr_sub), p=0.5, conf.level = 0.95)
 binom_test
 ```
 
-There is no significant difference between the number of times subordinates iniated grooming/ groomed dominants and vice versa
+*There is no significant difference between the number of times subordinates iniated grooming/ groomed dominants and vice versa*
 
+**Ending Grooming Bouts (includes any time a grooming bout was terminated by an individual)**
 ```{r}
-# Now doing the same thing but looking at the time subordinates ended grooming bouts with dominants
+#Subordinates ending grooming bouts with dominants
 sub_gr_end_dom_1<- EV_1 %>% filter(Behavior_Tally == "GREA_MY")
 sub_gr_end_dom_2<- MY_1 %>% filter(Behavior_Tally == "GRER_EV")
 sub_gr_end_dom_3<- ZY_3 %>% filter(Ad_Libitum == "EV_GREA_MY")
@@ -252,16 +255,30 @@ dom_gr_end_sub_2<- MY_1 %>% filter(Behavior_Tally == "GREA_KJ")
 dom_gr_end_sub_3<- ZY_1 %>% filter(Behavior_Tally == "GREA_KJ")
 dom_gr_end_sub<- sum(nrow(dom_gr_end_sub_1),nrow(dom_gr_end_sub_2),nrow(dom_gr_end_sub_3))
 dom_gr_end_sub
+```
 
+Finding the percentage of times subordinates ended grooming with dominants and dominants ended grooming with subordinates
+```{r}
+sub_gr_end_dom_perc<- (sub_gr_end_dom/140)*100
+dom_gr_end_sub_perc<- (dom_gr_end_sub/140)*100
+
+# Creating a data frame to show grooming order and percentage of groom ending between subs and doms
+end_percentage<- c(sub_gr_end_dom_perc,dom_gr_end_sub_perc)
+end_grooming_order<- c("Subordinate to Dominant","Dominant to Subordinate")
+gr_end_df<- data.frame("Grooming Order"=end_grooming_order, Percentage=end_percentage)
+```
+
+Running a binomal test for grooming order termination data
+```{r}
 end_binom_test<- binom.test(c(dom_gr_end_sub,sub_gr_end_dom), p=0.5, conf.level = 0.95)
 end_binom_test
 ```
 
-Also, no significant difference between the number of times subordinates ended grooming bouts with dominant inviduals and vice versa
+*There is no significant difference between the number of times subs ended grooming bouts with dominants or vice versa* 
 
-## Mutual Grooming between pairs of individuals
+### Mutual Grooming between pairs of individuals
 
-### Everest and May
+**Everest and May**
 ```{r}
 EV_MY_GRM_1<- EV_2 %>% filter(Point_Behavior == "GRM_MY")
 EV_MY_GRM_2<- EV_1 %>% filter(Behavior_Tally == "GRM_MY")
@@ -273,7 +290,7 @@ EV_MY_GRM_perc<- EV_MY_GRM/140*100
 EV_MY_GRM_perc
 ```
 
-### May and King Julian
+**May and King Julian**
 ```{r}
 MY_KJ_GRM_1<- MY_1 %>% filter(Point_Behavior == "GRM_KJ/" | Behavior_Tally == "GRM_KJ")
 MY_KJ_GRM<- nrow(MY_KJ_GRM_1)
@@ -283,7 +300,7 @@ MY_KJ_GRM_perc<- MY_KJ_GRM/140*100
 MY_KJ_GRM_perc
 ```
 
-### Zoey and King Julian
+**Zoey and King Julian**
 ```{r}
 ZY_KJ_GRM_1<- ZY_2 %>% filter(Point_Behavior == "GRM_KJ")
 ZY_KJ_GRM_2<- ZY_1 %>% filter(Behavior_Tally == "GRM_KJ")
@@ -294,21 +311,22 @@ ZY_KJ_GRM_perc<- ZY_KJ_GRM/140*100
 ZY_KJ_GRM_perc
 ```
 
+Creating a new dataframe for mutual grooming
 ```{r}
 GRM_percentage<- c(EV_MY_GRM_perc,MY_KJ_GRM_perc,ZY_KJ_GRM_perc)
 GRM_pairs<- c("Everest & May", "May & King Julian","Zoey & King Julian")
 GRM_df<- data.frame("Mutual Grooming Pairs"=GRM_pairs,"Percentage"=GRM_percentage)
-GRM_df
-
 ```
 
+Running a binomal test between EV-MY mutual grooming and ZY-KJ mutual grooming
+```{r}
+GRM_binom_test<- binom.test(c(EV_MY_GRM,ZY_KJ_GRM), p=0.5, conf.level = 0.95)
+GRM_binom_test
+```
 
+### Social Proximity Data
 
-
-
-# Some Location Behavior
-
-### Looking at how many point samples each individual spent alone (contact Id = 0 and <1m = 0)
+**Looking at how many point samples each individual spent alone (contact Id = 0 and <1m = 0)**
 ```{r}
 EV_alone<- EV_1 %>% filter(Contact_ID == "" & X.1_ID == "")
 EV_alone<- nrow(EV_alone)
@@ -341,7 +359,8 @@ ZY_alone
 ZY_alone_perc<- ZY_alone/140*100
 ZY_alone_perc
 ```
-### Adding new columns to my ranks df
+
+Adding new columns to my ranks dataframe
 ```{r}
 ranks$alone<- c(MY_alone,EV_alone,ZY_alone,KJ_alone) #creating a new columns for the number of point samples where each individual was alone 
 alone<- ranks$alone
@@ -349,23 +368,12 @@ alone<- ranks$alone
 ranks$perc_alone<- c(MY_alone_perc,EV_alone_perc,ZY_alone_perc,KJ_alone_perc) #creating a new column for the percentage of total point samples where each individual was alone
 perc_alone<- ranks$perc_alone
 perc_alone
-
-ranks
 ```
 
 ```{r} 
 ranks$IDs <- as.character(ranks$IDs)
 ranks$IDs <- factor(ranks$IDs, levels=c("MY", "EV", "ZY","KJ")) #I didn't want "IDs" to be listed alphabetically in the graph so first I switched it to a character list and then back to a factor list in the order I wanted
-
-g<- ggplot(data=ranks, aes(x=IDs, y=perc_alone))
-g<- g + geom_bar(stat= "identity")
-g<- g + labs(x="Animal IDs", y= "Percentage of Point Samples Spent Alone")
-g
-
 ```
-Fig 1. The percentage of 2-min sample points in which no troop member was in contact or <1m away from the focal animal. Animals are arranged according to their designated ranking order in descending order from left to right. 
-
-
 
 Trying out some nonparametric tests on my ranks vs perc_alone data
 ```{r}
@@ -379,24 +387,81 @@ library(psych) #needed for the correlation test
 
 #This is the Spearman Correlation 
 
-cor.test( ~ Rank + perc_alone,
+cor<- cor.test( ~ Rank + perc_alone,
          data=ranks,
          method = "spearman")
+cor
 
 # This is the Kendall–Theil Sen Siegel nonparametric linear regression
 
 model.k<- mblm(perc_alone ~ Rank, 
                data=ranks)
 summary(model.k)
+```
 
+*No significance across any of these tests*
 
+## Results
 
+```{r}
+GT_matrix
+```
+**Greeting Matrix**
+  
+  Using the approaching and greeting behaviors in conjunction with my previous knowledge of the possible troop social structure, I determined my own dominance ranking (in descending order) as follows: May, Everest, Zoey, King Julian.
+
+  Everest greets May (8) more than May greets Everest (3), which makes Everest submissive to May. Zoey greets Everest (3) and May (2) more than Everest (0) and May (1) greet Zoey, which makes Zoey submissive to both Everest and May. King Julian greets Zoey (4), Everest (2), and May (3), more than any of them greet King Julian (3, 1, 2, respectively), which makes King Julian the lowest ranking individual (Table 1).
+
+```{r}
+ranks #table 1
+```
+*Table 1. This table shows each of the four individuals, their dominance rank assignments, the total amount of point samples they spent alone throught the entire 140 point samples, and the total percentage of point samples they spent alone.*
+
+  The percentage of time subordinate individuals initiated unidirectional grooming bouts with dominant individuals was 6.43%. The percentage of time dominant individuals initiated the grooming was slightly higher at 7.14% (Table 2). A binomial test indicates no significant difference between them (p= 1). The percentage of time subordinates ended grooming bouts with dominants was 2.14% compared to dominants ending grooming bouts at 2.86% (Table 3). There is also no significant difference between grooming bout terminations (p=1). 
+
+```{r}
+gr_df #table 2
+```
+*Table 2. This table shows the total percentage of point samples where 1) a subordinate individual initiated a grooming bout with a dominant individual and/or groomed a dominant individual without any reciprocated grooming and 2) a dominant individual initiated a grooming bout with a subordinate and/or groomed a subordinate without any reciprocated grooming.* 
+
+```{r}
+gr_end_df #table 3
+```
+*Table 3. This table shows the total percentage of point samples where 1) a subordinate individual ended a grooming bout with a dominant individual and 2) a dominant individual ended a grooming bout with a subordinate individual.*
+
+  May and Everest, the two highest-ranking individuals, spent the greatest percentage of time mutually grooming one another (5%; Table 4). Zoey and King Julian, the two lowest-ranking individuals, spent the second greatest percentage of time mutually grooming one another (3.6%; Table 4). However, there is no significant difference between these mutual-grooming occurrences (p= 0.77).
+  
+```{r}
+GRM_df #table 4
+```
+*Table 4. This table shows the total percentage of point samples where different pairs of individuals engaged in mutual grooming with one another.*
+
+  May and Everest also spent the lowest percentage of time alone (3.57% & 2.86%, respectively; Table 1; Figure 1). Zoey and King Julian spent the greatest percentage of time alone (14.29% & 17.14%, respectively; Table 1; Figure 1). Results from the Kruskal-Wallis Test indicated a lack of significant difference in the percentage of time spent alone across all individuals (X2= 3; df= 3; p=0.39). There is a slight positive correlation between the individual’s dominance ranks and the percentage of time spent alone, however this test is not statistically significant (rho= 0.8; p= 0.33; Figure 2). Lastly, the Kendall–Theil Sen Siegel nonparametric linear regression indicated that dominance rank is not a significant predictor of social proximity (p= 0.098). 
+
+```{r}
+#FIG 1.
+g<- ggplot(data=ranks, aes(x=IDs, y=perc_alone))
+g<- g + geom_bar(stat= "identity")
+g<- g + labs(x="Animal IDs", y= "Percentage of Point Samples Spent Alone")
+g
+```
+
+*Figure 1. The percentage of 2-min sample points in which no troop member was in contact or <1m away from the focal animal. Animals are arranged according to their designated ranking order in descending order from left to right.*
+
+```{r}
+#FIG 2.
 plot(perc_alone ~ Rank,
      data = ranks,
-     pch  = 16)
+     pch  = 15)
 
 abline(model.k,
        col="blue",
        lwd=2)
 ```
+
+*Figure 2. The relationship between the dominance rank (MY= 1,EV= 2,ZY= 3,KJ= 4) and the percentage of time each individual spent alone (no other individual in contact or <1m away from the focal).* 
+
+## Discussion
+
+
 
